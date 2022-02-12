@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class ToolManager : MonoBehaviour
 {
     [SerializeField] GameObject toolScreen;
     [SerializeField] GameObject toolsButton;
+    Spawner spawner;
 
     [SerializeField] Slider quantitySlider;
     [SerializeField] TextMeshProUGUI quantityText;
@@ -16,11 +20,13 @@ public class ToolManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI rotationText;
 
     bool zoneTL, zoneBL, zoneTR, zoneBR;
+    int quantity, rotation;
 
     private void Awake()
     {
         toolsButton.SetActive(true);
         toolScreen.SetActive(false);
+        spawner = FindObjectOfType<Spawner>();
     }
     public void Update()
     {
@@ -30,26 +36,32 @@ public class ToolManager : MonoBehaviour
     //set zone to spawn characters
     public void SetTopLeft()
     {
-        zoneTL = true;
+        zoneTL = !zoneTL;
     }
     public void SetBottomLeft()
     {
-        zoneBL = true;
+        zoneBL = !zoneBL;
     }
     public void SetTopRight()
     {
-        zoneTR = true;
+        zoneTR = !zoneTR;
     }
     public void SetBottomRight()
     {
-        zoneBR = true;
+        zoneBR = !zoneBR;
     }
     // visualizes slider position to text
     void UpdateSliders()
     {
+        quantity = (int)quantitySlider.value;
         quantityText.text = quantitySlider.value.ToString();
+        rotation = (int)rotationSlider.value;
         rotationText.text = rotationSlider.value.ToString();
     }
+
+
+
+    //buttons 
     public void ShowTools()
     {
         toolScreen.SetActive(true);
@@ -59,10 +71,20 @@ public class ToolManager : MonoBehaviour
     {
         toolScreen.SetActive(false);
         toolsButton.SetActive(true);
+        spawner.Spawn(zoneTL, zoneBL, zoneTR, zoneBR, quantity, rotation);
     }
     public void ExitTool()
     {
         toolScreen.SetActive(false);
         toolsButton.SetActive(true);
+    }
+
+    public void QuitApp()
+    {
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#else
+        Application.Quit(); 
+#endif        
     }
 }
