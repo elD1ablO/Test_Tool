@@ -50,6 +50,7 @@ public class ToolManager : MonoBehaviour
     {
         zoneBR = !zoneBR;
     }
+
     // visualizes slider position to text
     void UpdateSliders()
     {
@@ -72,6 +73,7 @@ public class ToolManager : MonoBehaviour
         toolScreen.SetActive(false);
         toolsButton.SetActive(true);
         spawner.Spawn(zoneTL, zoneBL, zoneTR, zoneBR, quantity, rotation);
+        
     }
     public void ExitTool()
     {
